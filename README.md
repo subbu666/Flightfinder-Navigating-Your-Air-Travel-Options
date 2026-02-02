@@ -866,7 +866,7 @@ Contributions are welcome! Please follow these steps:
 ## 👨‍💻 Author
 
 **SALADI SUBRAHMANYAM**
-- GitHub: [@yourusername](https://github.com/subbu666)
+- GitHub: [subbu666](https://github.com/subbu666)
 - Email: saladisubrahmanyam6@gmail.com
 
 ---
