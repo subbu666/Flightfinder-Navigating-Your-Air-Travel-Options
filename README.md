@@ -1,4 +1,4 @@
-# ✈️ Flight Finder - Navigating Your Air Travel Options
+# ✈️ Flight Finder: Navigating Your Air Travel Options
 
 A full-stack flight booking platform built with the MERN stack, offering a premium flight booking experience with comprehensive role-based access control. The application features distinct interfaces for customers, flight operators, and administrators, providing seamless flight search, booking, and management capabilities.
 
@@ -39,17 +39,23 @@ Experience the complete platform walkthrough showcasing all features, user roles
 
 ## 📋 Table of Contents
 
-- [Video Demonstration](#-video-demonstration)
-- [Features](#-features)
-- [Tech Stack](#-tech-stack)
-- [Project Structure](#-project-structure)
-- [Installation](#-installation)
-- [Configuration](#-configuration)
-- [Usage](#-usage)
-- [API Endpoints](#-api-endpoints)
-- [Styling Architecture](#-styling-architecture)
-- [Future Enhancements](#-future-enhancements)
-- [Contributing](#-contributing)
+- [Video Demonstration](#video-demonstration)
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Project Structure](#project-structure)
+- [Installation](#installation)
+- [Configuration](#configuration)
+- [Usage](#usage)
+- [API Endpoints](#api-endpoints)
+- [Database Schema](#database-schema)
+- [Key Features Implementation](#key-features-implementation)
+- [Styling Architecture](#styling-architecture)
+- [Future Enhancements](#future-enhancements)
+- [Contributing](#contributing)
+- [Author](#author)
+- [Acknowledgments](#acknowledgments)
+- [Support](#support)
+- [Show Your Support](#show-your-support)
 
 ---
 
@@ -124,7 +130,6 @@ Experience the complete platform walkthrough showcasing all features, user roles
 ---
 
 ## 📁 Project Structure
-
 ```
 FlightFinder-Navigating-Your-Air-Travel-Options/
 │
@@ -491,12 +496,107 @@ await axios.get('https://your-backend-domain.com/fetch-flights')
 
 ---
 
+## 🗄️ Database Schema
+
+### User Model
+```javascript
+{
+  username: String,          // Full name of the user
+  email: String,             // Unique email address (used for login)
+  usertype: String,          // 'customer', 'admin', or 'flight-operator'
+  password: String,          // Hashed password using bcrypt
+  approval: String           // 'approved', 'not-approved', or 'rejected'
+}
+```
+
+**Indexes**: `email` (unique)
+
+### Flight Model
+```javascript
+{
+  flightName: String,        // Airline/operator name
+  flightId: String,          // Unique flight identifier (e.g., FL001)
+  origin: String,            // Departure city
+  destination: String,       // Arrival city
+  journeyDate: Date,         // Date of the flight (YYYY-MM-DD)
+  departureTime: String,     // Departure time (HH:MM)
+  arrivalTime: String,       // Arrival time (HH:MM)
+  basePrice: Number,         // Base price per passenger
+  totalSeats: Number         // Total available seats
+}
+```
+
+### Booking Model
+```javascript
+{
+  user: ObjectId,            // Reference to User model
+  flight: ObjectId,          // Reference to Flight model
+  flightName: String,        // Cached flight name
+  flightId: String,          // Cached flight ID
+  departure: String,         // Departure city
+  destination: String,       // Destination city
+  email: String,             // Contact email
+  mobile: String,            // Contact mobile number
+  seats: String,             // Assigned seat numbers (e.g., "E-1, E-2")
+  passengers: [{
+    name: String,            // Passenger full name
+    age: Number              // Passenger age
+  }],
+  totalPrice: Number,        // Total booking price
+  bookingDate: Date,         // When the booking was made
+  journeyDate: Date,         // Date of travel
+  journeyTime: String,       // Departure time for the journey
+  seatClass: String,         // 'economy', 'premium-economy', 'business', 'first-class'
+  bookingStatus: String      // 'confirmed' or 'cancelled'
+}
+```
+
+---
+
+## 🔐 Key Features Implementation
+
+### 1. Dynamic Pricing System
+```javascript
+// Price multipliers by class
+const priceMultipliers = {
+  'economy': 1,
+  'premium-economy': 2,
+  'business': 3,
+  'first-class': 4
+};
+
+// Total calculation
+totalPrice = basePrice × classMultiplier × numberOfPassengers
+```
+
+### 2. Automatic Seat Allocation
+```javascript
+// Seat prefixes by class
+const seatPrefixes = {
+  'economy': 'E',
+  'premium-economy': 'P',
+  'business': 'B',
+  'first-class': 'A'
+};
+
+// Example output: "B-1, B-2, B-3"
+```
+
+### 3. Role-Based Access Control
+
+**Route Protection**:
+- Public: Landing page, authentication
+- Customer: Booking, my bookings
+- Operator: Flight management (requires approval)
+- Admin: System management, approvals
+
+---
+
 ## 🎨 Styling Architecture
 
 ### CSS Organization
 
 The application uses a modular CSS architecture with separate stylesheets for each component, located in the `client/src/styles/` directory:
-
 ```
 client/src/styles/
 ├── Admin.css          → Styles for Admin.jsx
@@ -514,7 +614,6 @@ client/src/styles/
 ### Import Structure
 
 Each page component imports its corresponding CSS file from the styles folder:
-
 ```javascript
 // Example: src/pages/Admin.jsx
 import React from 'react';
@@ -530,7 +629,6 @@ const Admin = () => {
 
 export default Admin;
 ```
-
 ```javascript
 // Example: src/pages/LandingPage.jsx
 import React from 'react';
@@ -576,7 +674,6 @@ body {
 
 **3. Component-Specific Styles**
 Each component has its own CSS file in the `styles/` folder:
-
 ```css
 /* src/styles/LandingPage.css */
 .landing-page {
@@ -595,7 +692,6 @@ Each component has its own CSS file in the `styles/` folder:
   padding: 32px;
 }
 ```
-
 ```css
 /* src/styles/Navbar.css */
 .premium-navbar {
@@ -666,7 +762,6 @@ font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 ### Responsive Design
 
 All CSS files in the `styles/` folder include mobile-first responsive breakpoints:
-
 ```css
 /* Mobile First - Base styles */
 .container {
@@ -693,7 +788,6 @@ All CSS files in the `styles/` folder include mobile-first responsive breakpoint
 ### Animation Classes
 
 Common animations used across component stylesheets:
-
 ```css
 /* Fade In */
 @keyframes fadeIn {
@@ -718,104 +812,6 @@ Common animations used across component stylesheets:
   to { transform: rotate(360deg); }
 }
 ```
-
----
-
-## 🗄️ Database Schema
-
-### User Model
-```javascript
-{
-  username: String,          // Full name of the user
-  email: String,             // Unique email address (used for login)
-  usertype: String,          // 'customer', 'admin', or 'flight-operator'
-  password: String,          // Hashed password using bcrypt
-  approval: String           // 'approved', 'not-approved', or 'rejected'
-}
-```
-
-**Indexes**: `email` (unique)
-
-### Flight Model
-```javascript
-{
-  flightName: String,        // Airline/operator name
-  flightId: String,          // Unique flight identifier (e.g., FL001)
-  origin: String,            // Departure city
-  destination: String,       // Arrival city
-  journeyDate: Date,         // Date of the flight (YYYY-MM-DD)
-  departureTime: String,     // Departure time (HH:MM)
-  arrivalTime: String,       // Arrival time (HH:MM)
-  basePrice: Number,         // Base price per passenger
-  totalSeats: Number         // Total available seats
-}
-```
-
-### Booking Model
-```javascript
-{
-  user: ObjectId,            // Reference to User model
-  flight: ObjectId,          // Reference to Flight model
-  flightName: String,        // Cached flight name
-  flightId: String,          // Cached flight ID
-  departure: String,         // Departure city
-  destination: String,       // Destination city
-  email: String,             // Contact email
-  mobile: String,            // Contact mobile number
-  seats: String,             // Assigned seat numbers (e.g., "E-1, E-2")
-  passengers: [{
-    name: String,            // Passenger full name
-    age: Number              // Passenger age
-  }],
-  totalPrice: Number,        // Total booking price
-  bookingDate: Date,         // When the booking was made
-  journeyDate: Date,         // Date of travel
-  journeyTime: String,       // Departure time for the journey
-  seatClass: String,         // 'economy', 'premium-economy', 'business', 'first-class'
-  bookingStatus: String      // 'confirmed' or 'cancelled'
-}
-```
-
----
-
-## 🔐 Key Features Implementation
-
-### 1. Dynamic Pricing System
-
-```javascript
-// Price multipliers by class
-const priceMultipliers = {
-  'economy': 1,
-  'premium-economy': 2,
-  'business': 3,
-  'first-class': 4
-};
-
-// Total calculation
-totalPrice = basePrice × classMultiplier × numberOfPassengers
-```
-
-### 2. Automatic Seat Allocation
-
-```javascript
-// Seat prefixes by class
-const seatPrefixes = {
-  'economy': 'E',
-  'premium-economy': 'P',
-  'business': 'B',
-  'first-class': 'A'
-};
-
-// Example output: "B-1, B-2, B-3"
-```
-
-### 3. Role-Based Access Control
-
-**Route Protection**:
-- Public: Landing page, authentication
-- Customer: Booking, my bookings
-- Operator: Flight management (requires approval)
-- Admin: System management, approvals
 
 ---
 
@@ -862,7 +858,6 @@ Contributions are welcome! Please follow these steps:
 
 ---
 
-
 ## 👨‍💻 Author
 
 **SALADI SUBRAHMANYAM**
@@ -883,7 +878,7 @@ Contributions are welcome! Please follow these steps:
 
 ## 📞 Support
 
-For support, saladisubrahmanyam6@gmail.com or open an issue in the GitHub repository.
+For support, email saladisubrahmanyam6@gmail.com or open an issue in the GitHub repository.
 
 ---
 
