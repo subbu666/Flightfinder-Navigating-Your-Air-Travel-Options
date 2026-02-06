@@ -1,7 +1,6 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import { GeneralContext } from '../context/GeneralContext';
-import { useContext } from 'react';
+import api from '../config/axios';
 
 const FlightBookings = () => {
   const [userDetails, setUserDetails] = useState();
@@ -19,7 +18,7 @@ const FlightBookings = () => {
   const fetchUserData = async () =>{
     try{
       const id = localStorage.getItem('userId');
-      const response = await axios.get(`http://localhost:6001/fetch-user/${id}`);
+      const response = await api.get(`/fetch-user/${id}`);
       setUserDetails(response.data);
     }catch(err){
       showError('Error', 'Failed to load user data.');
@@ -29,7 +28,7 @@ const FlightBookings = () => {
   const fetchBookings = async () =>{
     setLoading(true);
     try {
-      const response = await axios.get('http://localhost:6001/fetch-bookings');
+      const response = await api.get('/fetch-bookings');
       setBookings(response.data.reverse());
     } catch (err) {
       showError('Error', 'Failed to load bookings.');
@@ -45,7 +44,7 @@ const FlightBookings = () => {
   const cancelTicket = async () =>{
     if (!selectedBooking) return;
     try {
-      await axios.put(`http://localhost:6001/cancel-ticket/${selectedBooking._id}`);
+      await api.put(`/cancel-ticket/${selectedBooking._id}`);
       setShowCancelModal(false);
       setSelectedBooking(null);
       showSuccess('Booking Cancelled', 'The booking has been cancelled successfully.');

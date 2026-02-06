@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import axios from 'axios'
+import api from '../config/axios'
 
 const Admin = () => {
 
@@ -22,9 +22,9 @@ const Admin = () => {
     setLoading(true);
     try {
       const [usersRes, bookingsRes, flightsRes] = await Promise.all([
-        axios.get('http://localhost:6001/fetch-users'),
-        axios.get('http://localhost:6001/fetch-bookings'),
-        axios.get('http://localhost:6001/fetch-flights')
+        api.get('/fetch-users'),
+        api.get('/fetch-bookings'),
+        api.get('/fetch-flights')
       ]);
       
       setUserCount(usersRes.data.length);
@@ -50,7 +50,7 @@ const Admin = () => {
   const approveRequest = async () =>{
     if (!selectedUser) return;
     try {
-      await axios.post('http://localhost:6001/approve-operator', {id: selectedUser._id});
+      await api.post('/approve-operator', {id: selectedUser._id});
       setShowApproveModal(false);
       setSelectedUser(null);
       fetchData();
@@ -62,7 +62,7 @@ const Admin = () => {
   const rejectRequest = async () =>{
     if (!selectedUser) return;
     try {
-      await axios.post('http://localhost:6001/reject-operator', {id: selectedUser._id});
+      await api.post('/reject-operator', {id: selectedUser._id});
       setShowRejectModal(false);
       setSelectedUser(null);
       fetchData();
@@ -116,6 +116,7 @@ const Admin = () => {
 
   return (
     <div className="admin-page">
+      {/* ... rest of JSX remains exactly the same ... */}
       <div className="admin-header">
         <div className="header-content">
           <h1>Admin Dashboard</h1>

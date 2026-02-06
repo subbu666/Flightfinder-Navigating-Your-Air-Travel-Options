@@ -1,4 +1,4 @@
-import axios from 'axios';
+import api from '../config/axios';
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 
@@ -10,7 +10,7 @@ const AllFlights = () => {
     const fetchFlights = async () =>{
       setLoading(true);
       try {
-        const response = await axios.get('http://localhost:6001/fetch-flights');
+        const response = await api.get('/fetch-flights');
         setFlights(response.data);
       } catch (err) {
         console.log(err);

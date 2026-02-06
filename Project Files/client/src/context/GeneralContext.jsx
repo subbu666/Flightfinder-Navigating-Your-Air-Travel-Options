@@ -1,5 +1,5 @@
 import React, { createContext, useState } from 'react';
-import axios from "axios";
+import api from "../config/axios";
 import { useNavigate } from "react-router-dom";
 
 export const GeneralContext = createContext();
@@ -62,7 +62,7 @@ const GeneralContextProvider = ({children}) => {
   const login = async () =>{
     try{
       const loginInputs = {email, password}
-        await axios.post('http://localhost:6001/login', loginInputs)
+        await api.post('/login', loginInputs)
         .then( async (res)=>{
 
             localStorage.setItem('userId', res.data._id);
@@ -94,7 +94,7 @@ const GeneralContextProvider = ({children}) => {
   
   const register = async () =>{
     try{
-        await axios.post('http://localhost:6001/register', inputs)
+        await api.post('/register', inputs)
         .then( async (res)=>{
             localStorage.setItem('userId', res.data._id);
             localStorage.setItem('userType', res.data.usertype);

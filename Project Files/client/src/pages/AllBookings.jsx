@@ -1,4 +1,4 @@
-import axios from 'axios';
+import api from '../config/axios';
 import React, { useEffect, useState } from 'react'
 
 const AllBookings = () => {
@@ -15,7 +15,7 @@ const AllBookings = () => {
   const fetchBookings = async () =>{
     setLoading(true);
     try {
-      const response = await axios.get('http://localhost:6001/fetch-bookings');
+      const response = await api.get('/fetch-bookings');
       setBookings(response.data.reverse());
     } catch (err) {
       console.log(err);
@@ -31,7 +31,7 @@ const AllBookings = () => {
   const cancelTicket = async () =>{
     if (!selectedBooking) return;
     try {
-      await axios.put(`http://localhost:6001/cancel-ticket/${selectedBooking._id}`);
+      await api.put(`/cancel-ticket/${selectedBooking._id}`);
       setShowCancelModal(false);
       setSelectedBooking(null);
       fetchBookings();
@@ -53,6 +53,7 @@ const AllBookings = () => {
 
   return (
     <div className="bookings-page">
+      {/* ... rest of JSX remains exactly the same ... */}
       <div className="page-header">
         <div className="header-content">
           <h1>All Bookings</h1>

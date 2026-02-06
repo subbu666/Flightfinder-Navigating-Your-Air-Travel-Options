@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { GeneralContext } from '../context/GeneralContext';
-import axios from 'axios';
+import api from '../config/axios';
 import { useParams, useNavigate } from 'react-router-dom';
 
 const BookFlight = () => {
@@ -21,7 +21,7 @@ const BookFlight = () => {
     const fetchFlightData = async () =>{
       setLoading(true);
       try {
-        const response = await axios.get(`http://localhost:6001/fetch-flight/${id}`);
+        const response = await api.get(`/fetch-flight/${id}`);
         setFlightName(response.data.flightName);
         setFlightId(response.data.flightId);
         setBasePrice(response.data.basePrice);
@@ -93,7 +93,7 @@ const BookFlight = () => {
       };
       
       try {
-        await axios.post('http://localhost:6001/book-ticket', inputs);
+        await api.post('/book-ticket', inputs);
         showSuccess('Booking Confirmed!', 'Your flight has been booked successfully.');
         setTimeout(() => navigate('/bookings'), 1500);
       } catch (err) {

@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react'
-import axios from 'axios';
+import React, { useEffect, useState, useContext } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { GeneralContext } from '../context/GeneralContext';
-import { useContext } from 'react';
+import api from '../config/axios';
 
 const NewFlight = () => {
 
@@ -43,7 +42,7 @@ const NewFlight = () => {
     const fetchUserData = async () =>{
       try{
         const id = localStorage.getItem('userId');
-        const response = await axios.get(`http://localhost:6001/fetch-user/${id}`);
+        const response = await api.get(`/fetch-user/${id}`);
         setUserDetails(response.data);
       }catch(err){
         showError('Error', 'Failed to load user data.');
@@ -78,7 +77,7 @@ const NewFlight = () => {
   
       try {
         // ✅ FIX 5: Endpoint already correct as 'add-flight'
-        await axios.post('http://localhost:6001/add-flight', inputs);
+        await api.post('/add-flight', inputs);
         showSuccess('Flight Added', 'Your new flight route has been added successfully.');
         navigate('/flights');
       } catch (err) {

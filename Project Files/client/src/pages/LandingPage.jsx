@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { GeneralContext } from '../context/GeneralContext';
+import api from '../config/axios';
 
 const LandingPage = () => {
 
@@ -85,7 +85,7 @@ const LandingPage = () => {
       if (departure !== "" && destination !== "" && departureDate && returnDate) {
         if (departureDate >= today && returnDate > departureDate) {
           try {
-            const response = await axios.get(`http://localhost:6001/fetch-flights?date=${departureDate}`);
+            const response = await api.get('/fetch-flights', { params: { date: departureDate } });
             
             // Wait for flight animation to complete (5 seconds)
             await new Promise(resolve => setTimeout(resolve, 5000));
@@ -125,7 +125,7 @@ const LandingPage = () => {
       if (departure !== "" && destination !== "" && departureDate) {
         if (departureDate >= today) {
           try {
-            const response = await axios.get(`http://localhost:6001/fetch-flights?date=${departureDate}`);
+            const response = await api.get('/fetch-flights', { params: { date: departureDate } });
             
             // Wait for flight animation to complete (5 seconds)
             await new Promise(resolve => setTimeout(resolve, 5000));
@@ -214,6 +214,7 @@ const LandingPage = () => {
 
   return (
     <div className="landing-page">
+      {/* ... rest of JSX remains exactly the same ... */}
       <section className="hero-section">
         <div className="hero-background">
           <div className="gradient-overlay"></div>
@@ -365,7 +366,7 @@ const LandingPage = () => {
                 </svg>
                 
                 <div className="animated-plane">
-                  <svg className="plane-svg" width="60" height="40" viewBox="0 0 60 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <svg className="plane-svg" width="60" height="40" viewBox="0 0 60 40" fill="none" xmlns="http://www.w3.org/2000/svg  ">
                     <g transform="translate(5, 20)">
                       {/* Main fuselage body */}
                       <ellipse cx="25" cy="0" rx="24" ry="5" fill="#d4af37" opacity="0.9"/>

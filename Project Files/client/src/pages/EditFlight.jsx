@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react'
-import axios from 'axios';
+import React, { useEffect, useState, useContext } from 'react'
 import { useParams, useNavigate } from 'react-router-dom';
 import { GeneralContext } from '../context/GeneralContext';
-import { useContext } from 'react';
+import api from '../config/axios';
 
 const EditFlight = () => {
     const [flightName, setFlightName] = useState('');
@@ -41,7 +40,7 @@ const EditFlight = () => {
     const fetchFlightData = async () =>{
       setLoading(true);
       try {
-        const response = await axios.get(`http://localhost:6001/fetch-flight/${id}`);
+        const response = await api.get(`/fetch-flight/${id}`);
         const data = response.data;
         setFlightName(data.flightName);
         setFlightId(data.flightId);
@@ -85,7 +84,7 @@ const EditFlight = () => {
       };
   
       try {
-        await axios.put('http://localhost:6001/update-flight', inputs);
+        await api.put('/update-flight', inputs);
         showSuccess('Flight Updated', 'Flight details have been updated successfully.');
         navigate('/flights');
       } catch (err) {

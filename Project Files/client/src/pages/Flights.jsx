@@ -1,8 +1,7 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { GeneralContext } from '../context/GeneralContext';
-import { useContext } from 'react';
+import api from '../config/axios';
 
 const Flights = () => {
   const [userDetails, setUserDetails] = useState();
@@ -19,7 +18,7 @@ const Flights = () => {
   const fetchUserData = async () =>{
     try{
       const id = localStorage.getItem('userId');
-      const response = await axios.get(`http://localhost:6001/fetch-user/${id}`);
+      const response = await api.get(`/fetch-user/${id}`);
       setUserDetails(response.data);
     }catch(err){
       showError('Error', 'Failed to load user data.');
@@ -29,7 +28,7 @@ const Flights = () => {
   const fetchFlights = async () =>{
     setLoading(true);
     try {
-      const response = await axios.get('http://localhost:6001/fetch-flights');
+      const response = await api.get('/fetch-flights');
       setFlights(response.data);
     } catch (err) {
       showError('Error', 'Failed to load flights.');
