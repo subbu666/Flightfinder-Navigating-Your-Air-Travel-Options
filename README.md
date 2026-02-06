@@ -10,7 +10,29 @@ A full-stack flight booking platform built with the MERN stack, offering a premi
 
 ---
 
-## 🎬 Video Demonstration
+## 📋 Table of Contents
+
+- [Video Demonstration](#video-demonstration)
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Project Structure](#project-structure)
+- [Installation](#installation)
+- [Configuration](#configuration)
+- [Usage](#usage)
+- [API Endpoints](#api-endpoints)
+- [Database Schema](#database-schema)
+- [Key Features Implementation](#key-features-implementation)
+- [Styling Architecture](#styling-architecture)
+- [Future Enhancements](#future-enhancements)
+- [Contributing](#contributing)
+- [Author](#author)
+- [Acknowledgments](#acknowledgments)
+- [Support](#support)
+- [Show Your Support](#show-your-support)
+
+---
+
+## 🎬Video Demonstration
 
 <div align="center">
 
@@ -37,29 +59,7 @@ Experience the complete platform walkthrough showcasing all features, user roles
 
 ---
 
-## 📋 Table of Contents
-
-- [Video Demonstration](#video-demonstration)
-- [Features](#features)
-- [Tech Stack](#tech-stack)
-- [Project Structure](#project-structure)
-- [Installation](#installation)
-- [Configuration](#configuration)
-- [Usage](#usage)
-- [API Endpoints](#api-endpoints)
-- [Database Schema](#database-schema)
-- [Key Features Implementation](#key-features-implementation)
-- [Styling Architecture](#styling-architecture)
-- [Future Enhancements](#future-enhancements)
-- [Contributing](#contributing)
-- [Author](#author)
-- [Acknowledgments](#acknowledgments)
-- [Support](#support)
-- [Show Your Support](#show-your-support)
-
----
-
-## ✨ Features
+## ✨Features
 
 ### 🎯 Core Features
 
@@ -102,7 +102,7 @@ Experience the complete platform walkthrough showcasing all features, user roles
 
 ---
 
-## 🛠 Tech Stack
+## 🛠Tech Stack
 
 ### Frontend
 - **React 18.x** - UI library with hooks and functional components
@@ -129,7 +129,7 @@ Experience the complete platform walkthrough showcasing all features, user roles
 
 ---
 
-## 📁 Project Structure
+## 📁Project Structure
 ```
 FlightFinder-Navigating-Your-Air-Travel-Options/
 │
@@ -245,7 +245,7 @@ FlightFinder-Navigating-Your-Air-Travel-Options/
 
 ---
 
-## 🚀 Installation
+## 🚀Installation
 
 ### Prerequisites
 - Node.js (v14 or higher)
@@ -304,7 +304,7 @@ npm start
 
 ---
 
-## ⚙️ Configuration
+## Configuration
 
 ### MongoDB Atlas Setup
 
@@ -340,7 +340,7 @@ await axios.get('https://your-backend-domain.com/fetch-flights')
 
 ---
 
-## 📖 Usage
+## 📖Usage
 
 ### User Registration & Login
 
@@ -456,7 +456,7 @@ await axios.get('https://your-backend-domain.com/fetch-flights')
 
 ---
 
-## 🔌 API Endpoints
+## 🔌API Endpoints
 
 ### Authentication Routes
 | Method | Endpoint | Description | Request Body | Response |
@@ -496,7 +496,7 @@ await axios.get('https://your-backend-domain.com/fetch-flights')
 
 ---
 
-## 🗄️ Database Schema
+## Database Schema
 
 ### User Model
 ```javascript
@@ -553,7 +553,7 @@ await axios.get('https://your-backend-domain.com/fetch-flights')
 
 ---
 
-## 🔐 Key Features Implementation
+## 🔐Key Features Implementation
 
 ### 1. Dynamic Pricing System
 ```javascript
@@ -592,7 +592,7 @@ const seatPrefixes = {
 
 ---
 
-## 🎨 Styling Architecture
+## 🎨Styling Architecture
 
 ### CSS Organization
 
@@ -815,7 +815,7 @@ Common animations used across component stylesheets:
 
 ---
 
-## 🚧 Future Enhancements
+## 🚧Future Enhancements
 
 ### Planned Features
 - [ ] Payment Gateway Integration (Stripe/Razorpay)
@@ -840,7 +840,7 @@ Common animations used across component stylesheets:
 
 ---
 
-## 🤝 Contributing
+## 🤝Contributing
 
 Contributions are welcome! Please follow these steps:
 
@@ -858,7 +858,7 @@ Contributions are welcome! Please follow these steps:
 
 ---
 
-## 👨‍💻 Author
+## 👨‍💻Author
 
 **SALADI SUBRAHMANYAM**
 - GitHub: [subbu666](https://github.com/subbu666)
@@ -866,7 +866,7 @@ Contributions are welcome! Please follow these steps:
 
 ---
 
-## 🙏 Acknowledgments
+## 🙏Acknowledgments
 
 - React documentation and community
 - MongoDB Atlas for database hosting
@@ -882,7 +882,7 @@ For support, email saladisubrahmanyam6@gmail.com or open an issue in the GitHub 
 
 ---
 
-## 🌟 Show Your Support
+## 🌟Show Your Support
 
 Give a ⭐️ if this project helped you!
 
