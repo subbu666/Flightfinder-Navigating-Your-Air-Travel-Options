@@ -252,7 +252,7 @@ FlightFinder-Navigating-Your-Air-Travel-Options/
 │       ├── package-lock.json
 │       └── node_modules/
 │
-├── .gitignore                          # Root-level git ignore
+|
 └── README.md                           # Project documentation
 ```
 
