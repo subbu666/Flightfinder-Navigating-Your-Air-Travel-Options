@@ -172,8 +172,10 @@ export const login = async (req, res) => {
 
   try {
     const user = await User.findOne({ email });
+
+    // ✅ 404 for non-existing user (distinct from wrong password)
     if (!user) {
-      return res.status(401).json({ message: 'Invalid email or password' });
+      return res.status(404).json({ message: 'No account found with this email. Please register to continue.' });
     }
 
     // Check if user is verified
@@ -186,8 +188,10 @@ export const login = async (req, res) => {
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
+
+    // ✅ 401 only for wrong password now
     if (!isMatch) {
-      return res.status(401).json({ message: 'Invalid email or password' });
+      return res.status(401).json({ message: 'Invalid email or password. Please try again.' });
     }
 
     res.json({

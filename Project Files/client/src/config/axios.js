@@ -28,11 +28,19 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
-      // Handle unauthorized
+    const isAuthRoute =
+      error.config?.url?.includes('/login') ||
+      error.config?.url?.includes('/register');
+
+    if (error.response?.status === 401 && !isAuthRoute) {
+      // Only redirect on 401 for protected routes (session expiry)
+      // NOT on /login or /register — those 401s must reach GeneralContext
+      // so that showError() can display the correct modal to the user
       localStorage.clear();
-      window.location.href = '/login';
+      window.location.href = '/auth';
     }
+
+    // Always re-throw so .catch() in GeneralContext can handle it
     return Promise.reject(error);
   }
 );

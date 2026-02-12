@@ -3,14 +3,18 @@ import { Navigate } from 'react-router-dom';
 
 const LoginProtector = ({children}) => {
 
-    if (localStorage.getItem('userType')){
-        if (localStorage.getItem('userType') === 'customer'){
-            return <Navigate to='/' replace /> 
-        }else if (localStorage.getItem('userType') === 'admin'){
-            return <Navigate to='/admin' replace /> 
+    const userType = localStorage.getItem('userType');
+
+    if (userType) {
+        if (userType === 'customer') {
+            return <Navigate to='/' replace />;
+        } else if (userType === 'admin') {
+            return <Navigate to='/admin' replace />;
+        } else if (userType === 'flight-operator') {
+            return <Navigate to='/flight-admin' replace />; // ✅ Fixed: was missing, operators could still see /auth
         }
     }
-  
+
     return children;
 }
 

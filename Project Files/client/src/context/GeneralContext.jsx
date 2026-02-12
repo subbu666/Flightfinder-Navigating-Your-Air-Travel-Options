@@ -59,97 +59,119 @@ const GeneralContextProvider = ({children}) => {
     showModal(title, message, 'info');
   };
 
-  const login = async () =>{
-    try{
-      const loginInputs = {email, password}
-        await api.post('/login', loginInputs)
-        .then( async (res)=>{
+  const login = async () => {
+    try {
+      const loginInputs = { email, password };
+      await api.post('/login', loginInputs)
+        .then(async (res) => {
+          localStorage.setItem('userId', res.data._id);
+          localStorage.setItem('userType', res.data.usertype);
+          localStorage.setItem('username', res.data.username);
+          localStorage.setItem('email', res.data.email);
 
-            localStorage.setItem('userId', res.data._id);
-            localStorage.setItem('userType', res.data.usertype);
-            localStorage.setItem('username', res.data.username);
-            localStorage.setItem('email', res.data.email);
+          showSuccess('Welcome Back!', `Hello ${res.data.username}, you've successfully logged in.`);
 
-            showSuccess('Welcome Back!', `Hello ${res.data.username}, you've successfully logged in.`);
-            
-            setTimeout(() => {
-              if(res.data.usertype === 'customer'){
-                  navigate('/');
-              } else if(res.data.usertype === 'admin'){
-                  navigate('/admin');
-              } else if(res.data.usertype === 'flight-operator'){
-                navigate('/flight-admin');
-              }
-            }, 1500);
-        }).catch((err) =>{
-            showError('Login Failed', 'Invalid email or password. Please try again.');
-            console.log(err);
+          setTimeout(() => {
+            if (res.data.usertype === 'customer') {
+              navigate('/');
+            } else if (res.data.usertype === 'admin') {
+              navigate('/admin');
+            } else if (res.data.usertype === 'flight-operator') {
+              navigate('/flight-admin');
+            }
+          }, 1500);
+
+        }).catch((err) => {
+          const status = err.response?.status;
+          const message = err.response?.data?.message;
+
+          if (status === 401) {
+            // Backend returns 401 for both wrong password AND user not found
+            // We use the exact message from backend to distinguish them
+            showError('Login Failed', message || 'Invalid email or password. Please try again.');
+          } else if (status === 403) {
+            // User exists but has not verified their email yet
+            showError('Email Not Verified', 'Please verify your email address before logging in.');
+          } else if (status === 500) {
+            showError('Server Error', 'Something went wrong on our end. Please try again later.');
+          } else {
+            showError('Login Failed', message || 'Something went wrong. Please try again later.');
+          }
+
+          console.log(err);
         });
 
-    }catch(err){
-        showError('Login Failed', 'Something went wrong. Please try again later.');
-        console.log(err);
-    }
-  }
-  
-  const register = async () =>{
-    try{
-        await api.post('/register', inputs)
-        .then( async (res)=>{
-            localStorage.setItem('userId', res.data._id);
-            localStorage.setItem('userType', res.data.usertype);
-            localStorage.setItem('username', res.data.username);
-            localStorage.setItem('email', res.data.email);
-
-            showSuccess('Registration Successful!', `Welcome ${res.data.username}! Your account has been created.`);
-            
-            setTimeout(() => {
-              if(res.data.usertype === 'customer'){
-                  navigate('/');
-              } else if(res.data.usertype === 'admin'){
-                  navigate('/admin');
-              } else if(res.data.usertype === 'flight-operator'){
-                navigate('/flight-admin');
-              }
-            }, 1500);
-
-        }).catch((err) =>{
-            showError('Registration Failed', 'Unable to create account. Please try again.');
-            console.log(err);
-        });
-    }catch(err){
-        showError('Registration Failed', 'Something went wrong. Please try again later.');
-        console.log(err);
+    } catch (err) {
+      showError('Login Failed', 'Something went wrong. Please try again later.');
+      console.log(err);
     }
   }
 
+  const register = async () => {
+    try {
+      await api.post('/register', inputs)
+        .then(async (res) => {
+          localStorage.setItem('userId', res.data._id);
+          localStorage.setItem('userType', res.data.usertype);
+          localStorage.setItem('username', res.data.username);
+          localStorage.setItem('email', res.data.email);
 
+          showSuccess('Registration Successful!', `Welcome ${res.data.username}! Your account has been created.`);
 
-  const logout = async () =>{
-    
+          setTimeout(() => {
+            if (res.data.usertype === 'customer') {
+              navigate('/');
+            } else if (res.data.usertype === 'admin') {
+              navigate('/admin');
+            } else if (res.data.usertype === 'flight-operator') {
+              navigate('/flight-admin');
+            }
+          }, 1500);
+
+        }).catch((err) => {
+          const status = err.response?.status;
+          const message = err.response?.data?.message;
+
+          if (status === 400) {
+            // Backend returns 400 for 'User already exists with this email'
+            showError('Account Already Exists', message || 'An account with this email already exists. Please login instead.');
+          } else if (status === 500) {
+            showError('Server Error', 'Something went wrong on our end. Please try again later.');
+          } else {
+            showError('Registration Failed', message || 'Unable to create account. Please try again.');
+          }
+
+          console.log(err);
+        });
+
+    } catch (err) {
+      showError('Registration Failed', 'Something went wrong. Please try again later.');
+      console.log(err);
+    }
+  }
+
+  const logout = async () => {
     localStorage.clear();
     for (let key in localStorage) {
       if (localStorage.hasOwnProperty(key)) {
         localStorage.removeItem(key);
       }
     }
-    
+
     showSuccess('Logged Out', 'You have been successfully logged out.');
-    
+
     setTimeout(() => {
       navigate('/');
     }, 1000);
   }
 
-
-
   return (
     <GeneralContext.Provider value={{
-      login, register, logout, 
-      username, setUsername, 
-      email, setEmail, 
-      password, setPassword, 
-      usertype, setUsertype, 
+      login, register, logout,
+      username, setUsername,
+      email, setEmail,
+      password, setPassword,
+      usertype, setUsertype,
       ticketBookingDate, setTicketBookingDate,
       modal, setModal,
       showModal, hideModal,
@@ -160,4 +182,4 @@ const GeneralContextProvider = ({children}) => {
   )
 }
 
-export default GeneralContextProvider
+export default GeneralContextProvider;

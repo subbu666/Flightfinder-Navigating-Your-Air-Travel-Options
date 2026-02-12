@@ -5,6 +5,7 @@ const ForgotPassword = ({ onClose, onSuccess }) => {
   const [step, setStep] = useState(1); // 1: Email, 2: OTP, 3: New Password
   const [email, setEmail] = useState('');
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
+  const [verifiedOtp, setVerifiedOtp] = useState(''); // 🔥 NEW: Store verified OTP
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -103,7 +104,6 @@ const ForgotPassword = ({ onClose, onSuccess }) => {
       const data = await response.json();
 
       if (!response.ok) {
-        // Handle different error statuses with more specific messages
         if (response.status === 404) {
           throw new Error('No account exists with this email address. Please check and try again.');
         } else if (response.status === 403) {
@@ -114,7 +114,7 @@ const ForgotPassword = ({ onClose, onSuccess }) => {
       }
 
       setStep(2);
-      setTimer(120); // 2 minutes
+      setTimer(120);
       setCanResend(false);
       setIsExpired(false);
       setResendCount(0);
@@ -228,7 +228,6 @@ const ForgotPassword = ({ onClose, onSuccess }) => {
       const data = await response.json();
 
       if (!response.ok) {
-        // Check if error is about expiry
         if (data.message && data.message.toLowerCase().includes('expired')) {
           setIsExpired(true);
           setCanResend(true);
@@ -237,6 +236,10 @@ const ForgotPassword = ({ onClose, onSuccess }) => {
         throw new Error(data.message || 'Invalid OTP');
       }
 
+      // 🔥 CRITICAL FIX: Store the verified OTP before moving to next step
+      setVerifiedOtp(otpString);
+      console.log('✅ OTP Verified and Stored:', otpString);
+      
       setStep(3);
     } catch (err) {
       setError(err.message);
@@ -250,14 +253,12 @@ const ForgotPassword = ({ onClose, onSuccess }) => {
   const handleResetPassword = async (e) => {
     e.preventDefault();
     
-    // Validate password strength
     const passwordValidation = validatePasswordStrength(newPassword);
     if (!passwordValidation.isValid) {
       setError('Your password must be Strong or Very Strong. Please include uppercase, lowercase, numbers, and special characters.');
       return;
     }
 
-    // Check if passwords match
     if (newPassword !== confirmPassword) {
       setError('Passwords do not match. Please ensure both fields are identical.');
       return;
@@ -267,10 +268,17 @@ const ForgotPassword = ({ onClose, onSuccess }) => {
     setError('');
 
     try {
+      // 🔥 CRITICAL FIX: Use verifiedOtp instead of otp.join('')
+      console.log('🔐 Resetting password with verified OTP:', verifiedOtp);
+      
       const response = await fetch(`${process.env.REACT_APP_API_URL}/reset-password`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, otp: otp.join(''), newPassword })
+        body: JSON.stringify({ 
+          email, 
+          otp: verifiedOtp,  // Use the stored verified OTP
+          newPassword 
+        })
       });
 
       const data = await response.json();
@@ -279,7 +287,6 @@ const ForgotPassword = ({ onClose, onSuccess }) => {
         throw new Error(data.message || 'Failed to reset password');
       }
 
-      // Show success message and close after 2 seconds
       onSuccess?.('Password reset successfully! Please login with your new password.');
       setTimeout(() => {
         onClose();
@@ -508,7 +515,6 @@ const ForgotPassword = ({ onClose, onSuccess }) => {
                 </button>
               </div>
 
-              {/* Resend Attempts Counter */}
               {resendCount > 0 && resendCount < MAX_RESEND_ATTEMPTS && (
                 <div className="fp-resend-counter">
                   <div className="counter-bar">
@@ -649,7 +655,6 @@ const ForgotPassword = ({ onClose, onSuccess }) => {
                 </button>
               </div>
 
-              {/* Password Strength Indicator */}
               {newPassword && <PasswordStrengthIndicator password={newPassword} />}
 
               <div className="form-group floating password-group">
@@ -688,7 +693,6 @@ const ForgotPassword = ({ onClose, onSuccess }) => {
                 </button>
               </div>
 
-              {/* Password Match Indicator */}
               {confirmPassword && (
                 <div className={`fp-password-match ${newPassword === confirmPassword ? 'match' : 'no-match'}`}>
                   {newPassword === confirmPassword ? (
@@ -758,12 +762,15 @@ const ForgotPassword = ({ onClose, onSuccess }) => {
           position: relative;
           width: 100%;
           max-width: 560px;
+          max-height: 90vh;
           background: linear-gradient(145deg, rgba(22, 27, 34, 0.98) 0%, rgba(13, 17, 23, 0.98) 100%);
           border: 1px solid rgba(212, 175, 55, 0.2);
           border-radius: 28px;
           box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6), 0 0 60px rgba(212, 175, 55, 0.15);
           animation: fpSlideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
           overflow: hidden;
+          display: flex;
+          flex-direction: column;
         }
 
         @keyframes fpSlideUp {
@@ -792,7 +799,7 @@ const ForgotPassword = ({ onClose, onSuccess }) => {
           color: rgba(255, 255, 255, 0.6);
           cursor: pointer;
           transition: all 0.3s ease;
-          z-index: 1;
+          z-index: 10;
         }
 
         .fp-close:hover {
@@ -804,6 +811,29 @@ const ForgotPassword = ({ onClose, onSuccess }) => {
 
         .fp-content {
           padding: 50px 40px 40px;
+          overflow-y: auto;
+          overflow-x: hidden;
+          max-height: calc(90vh - 0px);
+          scrollbar-width: thin;
+          scrollbar-color: rgba(212, 175, 55, 0.3) rgba(255, 255, 255, 0.05);
+        }
+
+        .fp-content::-webkit-scrollbar {
+          width: 8px;
+        }
+
+        .fp-content::-webkit-scrollbar-track {
+          background: rgba(255, 255, 255, 0.05);
+          border-radius: 10px;
+        }
+
+        .fp-content::-webkit-scrollbar-thumb {
+          background: rgba(212, 175, 55, 0.3);
+          border-radius: 10px;
+        }
+
+        .fp-content::-webkit-scrollbar-thumb:hover {
+          background: rgba(212, 175, 55, 0.5);
         }
 
         .fp-steps {
@@ -1413,13 +1443,26 @@ const ForgotPassword = ({ onClose, onSuccess }) => {
           text-align: center;
         }
 
+        @media (max-width: 768px) {
+          .forgot-password-container {
+            max-height: 95vh;
+          }
+          
+          .fp-content {
+            padding: 40px 32px 32px;
+            max-height: calc(95vh - 0px);
+          }
+        }
+
         @media (max-width: 480px) {
           .forgot-password-container {
             margin: 0 16px;
+            max-height: 95vh;
           }
 
           .fp-content {
             padding: 40px 24px 32px;
+            max-height: calc(95vh - 0px);
           }
 
           .fp-form h2 {
