@@ -133,79 +133,127 @@ Experience the complete platform walkthrough showcasing all features, user roles
 ```
 FlightFinder-Navigating-Your-Air-Travel-Options/
 │
-├── server/                    # Backend application
-│   ├── index.js              # Express server and API routes
-│   ├── schemas.js            # Mongoose models (User, Flight, Booking)
-│   ├── .env                  # Environment variables
-│   ├── package.json          # Backend dependencies
-│   └── node_modules/         # Backend packages
+├── Project Files/
+│   │
+│   ├── server/                         # Backend application (Node.js + Express)
+│   │   │
+│   │   ├── src/
+│   │   │   │
+│   │   │   ├── config/                 # Configuration files
+│   │   │   │   └── database.js         # MongoDB connection setup
+│   │   │   │
+│   │   │   ├── models/                 # Mongoose schemas
+│   │   │   │   ├── User.js             # User model (customer, operator, admin)
+│   │   │   │   ├── Flight.js           # Flight model
+│   │   │   │   └── Booking.js          # Booking/ticket model
+│   │   │   │
+│   │   │   ├── controllers/            # Business logic handlers
+│   │   │   │   ├── authController.js   # Authentication & OTP logic
+│   │   │   │   ├── userController.js   # User management (fetch, approve)
+│   │   │   │   ├── flightController.js # Flight CRUD operations
+│   │   │   │   └── bookingController.js # Booking management
+│   │   │   │
+│   │   │   ├── routes/                 # API route definitions
+│   │   │   │   ├── authRoutes.js       # Auth endpoints (login, signup, OTP)
+│   │   │   │   ├── userRoutes.js       # User endpoints
+│   │   │   │   ├── flightRoutes.js     # Flight endpoints
+│   │   │   │   └── bookingRoutes.js    # Booking endpoints
+│   │   │   │
+│   │   │   ├── middleware/             # Express middleware
+│   │   │   │   ├── validateOTP.js      # OTP validation logic
+│   │   │   │   └── errorHandler.js     # Global error handler & 404
+│   │   │   │
+│   │   │   ├── services/               # External service integrations
+│   │   │   │   └── emailService.js     # Nodemailer email functions
+│   │   │   │
+│   │   │   ├── utils/                  # Helper utilities
+│   │   │   │   └── otpHelper.js        # OTP generation & expiry checks
+│   │   │   │
+│   │   │   └── server.js               # Express app entry point
+│   │   │
+│   │   ├── .env                        # Backend environment variables
+│   │   ├── .gitignore                  # Git ignore file
+│   │   ├── package.json                # Backend dependencies
+│   │   ├── package-lock.json
+│   │   └── node_modules/               # Backend packages
+│   │
+│   └── client/                         # Frontend application (React)
+│       │
+│       ├── public/                     # Static public assets
+│       │   ├── favicon.ico
+│       │   ├── index.html
+│       │   ├── logo192.png
+│       │   ├── logo512.png
+│       │   ├── manifest.json
+│       │   └── robots.txt
+│       │
+│       ├── src/                        # React source files
+│       │   │
+│       │   ├── assets/                 # Static assets (images, icons)
+│       │   │
+│       │   ├── config/                 # Centralized configuration files
+│       │   │   ├── api.js              # Backend API base URL configuration
+│       │   │   └── axios.js            # Axios instance with auth & error handling
+│       │   │
+│       │   ├── components/             # Reusable UI components
+│       │   │   ├── Login.jsx                   # Customer login component
+│       │   │   ├── Register.jsx                # User registration with role selection
+│       │   │   ├── ForgotPassword.jsx          # Initiates password reset via email OTP
+│       │   │   ├── OTPModal.jsx                # OTP verification modal component
+│       │   │   ├── Navbar.jsx                  # Role-based dynamic navigation
+│       │   │   └── PremiumModal.jsx            # Reusable premium feature modal
+│       │   │
+│       │   ├── context/                # React Context API state management
+│       │   │   └── GeneralContext.jsx          # Global state (auth, modals, bookings)
+│       │   │
+│       │   ├── pages/                  # Main application pages
+│       │   │   ├── Admin.jsx                   # Admin dashboard
+│       │   │   ├── AllBookings.jsx             # View all bookings (admin)
+│       │   │   ├── AllFlights.jsx              # View all flights
+│       │   │   ├── AllUsers.jsx                # User management (admin)
+│       │   │   ├── Authenticate.jsx            # Login/Register page
+│       │   │   ├── BookFlight.jsx              # Flight booking form
+│       │   │   ├── Bookings.jsx                # User's bookings
+│       │   │   ├── EditFlight.jsx              # Edit flight details
+│       │   │   ├── FlightAdmin.jsx             # Operator flight management
+│       │   │   ├── FlightBookings.jsx          # Operator's flight bookings
+│       │   │   ├── Flights.jsx                 # Search & browse flights
+│       │   │   ├── LandingPage.jsx             # Home page
+│       │   │   └── NewFlight.jsx               # Add new flight (operator)
+│       │   │
+│       │   ├── RouteProtectors/        # Route access control
+│       │   │   ├── AuthProtector.jsx           # Protect authenticated routes
+│       │   │   └── LoginProtector.jsx          # Redirect logged-in users
+│       │   │
+│       │   ├── styles/                 # Component & page-specific CSS
+│       │   │   ├── Admin.css
+│       │   │   ├── AllFlights.css
+│       │   │   ├── AllUsers.css
+│       │   │   ├── Authenticate.css
+│       │   │   ├── BookFlight.css
+│       │   │   ├── Bookings.css
+│       │   │   ├── FlightAdmin.css
+│       │   │   ├── LandingPage.css
+│       │   │   ├── Navbar.css
+│       │   │   └── NewFlight.css
+│       │   │
+│       │   ├── App.css
+│       │   ├── App.js                  # Main app component with routing
+│       │   ├── App.test.js
+│       │   ├── index.css               # Global styles
+│       │   ├── index.js                # React entry point
+│       │   ├── logo.svg
+│       │   ├── reportWebVitals.js
+│       │   └── setupTests.js
+│       │
+│       ├── .env                        # Frontend environment variables
+│       ├── .gitignore
+│       ├── package.json                # Frontend dependencies
+│       ├── package-lock.json
+│       └── node_modules/
 │
-└── client/                    # Frontend application
-    │
-    ├── public/               # Static public assets
-    │   ├── favicon.ico
-    │   ├── index.html
-    │   ├── logo192.png
-    │   ├── logo512.png
-    │   ├── manifest.json
-    │   └── robots.txt
-    │
-    ├── src/                  # Source files
-    │   │
-    │   ├── assets/           # Static assets (images, icons)
-    │   │
-    │   ├── components/       # Reusable React components
-    │   │   ├── Login.jsx             # Customer login component
-    │   │   ├── Register.jsx          # User registration with role selection
-    │   │   ├── Navbar.jsx            # Dynamic navigation based on user role
-    │   │   └── PremiumModal.jsx      # Reusable modal component
-    │   │
-    │   ├── context/          # React Context for state management
-    │   │   └── GeneralContext.jsx    # Global state (auth, modals, booking data)
-    │   │
-    │   ├── pages/            # Main application pages
-    │   │   ├── Admin.jsx             # Admin dashboard and operator approvals
-    │   │   ├── AllBookings.jsx       # Admin view of all bookings
-    │   │   ├── AllFlights.jsx        # Admin view of all flights
-    │   │   ├── AllUsers.jsx          # Admin user management
-    │   │   ├── Authenticate.jsx      # Authentication page wrapper
-    │   │   ├── BookFlight.jsx        # Flight booking form
-    │   │   ├── Bookings.jsx          # Customer booking history
-    │   │   ├── EditFlight.jsx        # Edit existing flight details
-    │   │   ├── FlightAdmin.jsx       # Flight operator dashboard
-    │   │   ├── FlightBookings.jsx    # Operator-specific bookings
-    │   │   ├── Flights.jsx           # Operator's flight list
-    │   │   ├── LandingPage.jsx       # Main landing page with search
-    │   │   └── NewFlight.jsx         # Create new flight form
-    │   │
-    │   ├── RouteProtectors/  # Route protection components
-    │   │   ├── AuthProtector.jsx     # Protects authenticated routes
-    │   │   └── LoginProtector.jsx    # Redirects logged-in users
-    │   │
-    │   ├── styles/           # Component-specific CSS stylesheets
-    │   │   ├── Admin.css             # Admin dashboard styles
-    │   │   ├── AllFlights.css        # All flights page styles
-    │   │   ├── AllUsers.css          # User management styles
-    │   │   ├── Authenticate.css      # Authentication page styles
-    │   │   ├── BookFlight.css        # Flight booking form styles
-    │   │   ├── Bookings.css          # Bookings page styles
-    │   │   ├── FlightAdmin.css       # Flight operator dashboard styles
-    │   │   ├── LandingPage.css       # Landing page styles
-    │   │   ├── Navbar.css            # Navigation bar styles
-    │   │   └── NewFlight.css         # New flight creation styles
-    │   │
-    │   ├── App.css           # Global application styles
-    │   ├── App.js            # Main application component with routing
-    │   ├── App.test.js       # Application tests
-    │   ├── index.css         # Root CSS styles
-    │   ├── index.js          # Application entry point
-    │   ├── logo.svg          # Application logo
-    │   ├── reportWebVitals.js # Performance monitoring
-    │   └── setupTests.js     # Test configuration
-    │
-    ├── package.json          # Frontend dependencies
-    ├── package-lock.json     # Locked versions
-    └── node_modules/         # Frontend packages
+├── .gitignore                          # Root-level git ignore
+└── README.md                           # Project documentation
 ```
 
 ### Directory Structure Explanation
